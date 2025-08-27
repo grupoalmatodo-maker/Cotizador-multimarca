@@ -17,7 +17,8 @@ export async function getUserRole(): Promise<UserRole | null> {
       .eq("id", user.id)
       .single();
 
-    return (profile as any)?.role || null;
+    // Corregir el cast problemático usando unknown como intermediario
+    return (profile as unknown as { role: UserRole })?.role || null;
   } catch (error) {
     console.error("Error getting user role:", error);
     return null;
