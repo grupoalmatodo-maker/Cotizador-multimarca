@@ -1,0 +1,51 @@
+{
+"projectName": "CotizAI",
+"context": {
+"stack": "Next.js (App Router) + Tailwind + Supabase (Auth/DB) + n8n + GPT-4o",
+"goals": [
+"Subir y procesar PDF/Excel con IA y guardar costos",
+"Cotizar con márgenes, IVA y comisión sin exponer costos a Ventas",
+"Enviar por WhatsApp/Email via n8n y registrar estatus"
+]
+},
+"style": {
+"language": "TypeScript required",
+"guidelines": [
+"App Router Next.js 14",
+"Componentes pequeños y reutilizables",
+"Manejo de errores simple y robusto",
+"Tailwind para estilos"
+]
+},
+"endpoints": [
+{"path": "/api/upload", "desc": "Recibe PDF/Excel y manda a n8n (ingesta)"},
+{"path": "/api/quote", "desc": "Calcula precio/IVA/comisión/utilidad (server-side)"},
+{"path": "/api/send", "desc": "Activa n8n para WhatsApp/Email y marca sent"}
+],
+"database": {
+"mustHave": [
+"profiles (roles: admin, compras, ventas) con trigger on auth.users",
+"suppliers, products, price_lists, purchase_prices",
+"margin_rules, commission_rules, quotes, quote_items, feedback",
+"RLS: ventas NO puede leer costos; vistas seguras recomendadas"
+]
+},
+"priorities": [
+"Flujo end-to-end funcionando",
+"Persistencia en Supabase",
+"Entrega por n8n sin errores"
+],
+"envVarsRequired": [
+"NEXT_PUBLIC_SUPABASE_URL",
+"NEXT_PUBLIC_SUPABASE_ANON_KEY",
+"SUPABASE_SERVICE_ROLE_KEY",
+"N8N_WEBHOOK_URL_INGEST",
+"N8N_WEBHOOK_URL_SEND",
+"N8N_WEBHOOK_SECRET",
+"NEXT_PUBLIC_APP_URL"
+],
+"checklist": {
+"dev": ["pnpm dev debe levantar en localhost:3000", "pnpm build debe pasar sin errores"],
+"auth": ["Registro crea profile con role='ventas'", "Cambiar role de Gabino a 'compras' para probar /compras"]
+}
+}

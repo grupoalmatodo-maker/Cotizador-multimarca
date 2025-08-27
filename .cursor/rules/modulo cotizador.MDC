@@ -1,0 +1,19 @@
+{
+    "projectName": "CotizAI",
+    "stage": "Módulo Cotizador",
+    "tasks": [
+      "Crear formulario de selección de producto, zona y tipo de cliente",
+      "Aplicar lógica de cálculo: precio, IVA, comisión, utilidad",
+      "Generar vista previa de cotización con desglose",
+      "Habilitar botón de envío a webhook (n8n)"
+    ],
+    "dbTables": ["cotizaciones"],
+    "output": "Cotización con desglose y texto persuasivo",
+    "rules": [
+      "Todos los cálculos deben ser verificables desde código.",
+      "El precio final debe incluir todos los componentes financieros.",
+      "No se debe permitir enviar una cotización incompleta.",
+      "Registrar cada envío con ID único y estatus inicial: enviada."
+    ]
+  }
+  

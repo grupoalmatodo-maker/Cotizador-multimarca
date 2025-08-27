@@ -1,0 +1,20 @@
+{
+    "projectName": "CotizAI",
+    "stage": "Módulo Compras",
+    "tasks": [
+      "Desarrollar vista de carga de archivos PDF/Excel",
+      "Conectar con webhook n8n para procesamiento",
+      "Estructurar tabla con productos, proveedor, costo",
+      "Guardar los datos limpios en Supabase"
+    ],
+    "files": [".pdf", ".xlsx"],
+    "aiTool": "GPT-4o vía n8n",
+    "dbTables": ["productos", "proveedores"],
+    "rules": [
+      "Validar tipo de archivo antes de enviarlo a n8n.",
+      "Los datos deben normalizarse antes de insertarse en Supabase.",
+      "Registrar cada subida con timestamp y usuario.",
+      "No se deben sobrescribir productos si ya existen; solo actualizar costo_actual."
+    ]
+  }
+  

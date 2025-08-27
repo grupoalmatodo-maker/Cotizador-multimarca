@@ -1,0 +1,23 @@
+{
+    "projectName": "CotizAI",
+    "stage": "Setup Base",
+    "tasks": [
+      "Crear proyecto en Supabase (Auth + DB)",
+      "Crear repositorio en Cursor con esta estructura",
+      "Configurar entorno en Vercel para despliegue automático",
+      "Registrar variables de entorno iniciales",
+      "Validar conexión entre Cursor y Supabase"
+    ],
+    "envVars": [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+    ],
+    "devTools": ["Cursor", "Supabase", "Vercel"],
+    "rules": [
+      "Todo archivo de configuración debe documentarse en README.",
+      "El repositorio debe incluir instrucciones para clonar y correr en local.",
+      "Solo se usan dependencias oficiales y estables.",
+      "No se permite código sin linting o sin commit descriptivo."
+    ]
+  }
+  

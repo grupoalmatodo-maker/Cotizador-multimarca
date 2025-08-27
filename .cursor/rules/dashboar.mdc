@@ -1,0 +1,18 @@
+{
+    "projectName": "CotizAI",
+    "stage": "Dashboards y Feedback",
+    "tasks": [
+      "Desarrollar vista de historial de cotizaciones por usuario",
+      "Agregar columna de estatus: enviada, cerrada, perdida",
+      "Habilitar formulario de feedback con motivo de no cierre",
+      "Enviar feedback a Compras si se menciona ‘precio alto’"
+    ],
+    "dbTables": ["cotizaciones", "feedback"],
+    "rules": [
+      "Toda retroalimentación debe quedar ligada a un ID de cotización.",
+      "El dashboard debe permitir filtros por fecha, cliente o estatus.",
+      "Evitar mostrar información sensible a usuarios sin rol adecuado.",
+      "Registrar ajustes de precios si el feedback es recurrente."
+    ]
+  }
+  

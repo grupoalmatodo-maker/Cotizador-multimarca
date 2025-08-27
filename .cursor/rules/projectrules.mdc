@@ -1,0 +1,126 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+{
+"projectName": "CotizAI – Cotizador Multimarca (Grupo Almatodo)",
+"owner": "Grupo Almatodo",
+"brand": ["HandwareMarket", "HWS Logística", "CGN", "Maszione", "Modazona"],
+"packageManager": "pnpm",
+"stack": {
+"frontend": "Next.js (App Router) + TailwindCSS + TypeScript",
+"backend": "Next.js server actions / API routes",
+"database": "Supabase (PostgreSQL + Auth + RLS)",
+"automation": "n8n (webhooks)",
+"ai": "GPT-4o u otro modelo compatible",
+"hosting": "Vercel"
+},
+"extensionsRecommended": [
+"esbenp.prettier-vscode",
+"dbaeumer.vscode-eslint",
+"bradlc.vscode-tailwindcss",
+"supabase.supabase"
+],
+"envVarsRequired": [
+"NEXT_PUBLIC_SUPABASE_URL",
+"NEXT_PUBLIC_SUPABASE_ANON_KEY",
+"SUPABASE_SERVICE_ROLE_KEY",
+"NEXT_PUBLIC_APP_URL",
+"N8N_WEBHOOK_URL_INGEST",
+"N8N_WEBHOOK_URL_SEND",
+"N8N_WEBHOOK_SECRET"
+],
+"directories": {
+"required": [
+"src/app",
+"src/components",
+"src/lib",
+"src/services",
+"src/types",
+"src/styles"
+],
+"notes": "Coloca tipados globales en src/types (ej. database.ts), helpers puros en src/lib y clientes de APIs/BaaS en src/services."
+},
+"endpoints": [
+{ "path": "/api/upload", "method": "POST", "desc": "Recibe PDF/Excel y envía a n8n (ingesta). Solo rol=compras." },
+{ "path": "/api/quote", "method": "POST", "desc": "Calcula precio/IVA/comisión/utilidad en server. Lee reglas desde BD." },
+{ "path": "/api/send", "method": "POST", "desc": "Dispara envío por n8n (WhatsApp/Email) y actualiza estatus de la cotización." }
+],
+"database": {
+"tablesCore": [
+"profiles (id, email, role: admin|compras|ventas)",
+"suppliers",
+"products",
+"price_lists / purchase_prices",
+"margin_rules",
+"commission_rules",
+"quotes",
+"quote_items",
+"feedback"
+],
+"rlsPrinciples": [
+"ventas NO puede leer costos ni purchase_prices",
+"operaciones sensibles vía RPC/views seguras",
+"todas las inserciones registran user_id y timestamp"
+]
+},
+"scripts": {
+"dev": "next dev",
+"build": "next build",
+"start": "next start",
+"lint": "next lint",
+"format": "prettier --write .",
+"typecheck": "tsc --noEmit"
+},
+"project_rules": [
+"TypeScript obligatorio. No mezclar JS en src/*.",
+"Toda lógica de precios debe ser funciones puras en src/lib/pricing.ts y testeables.",
+"Prohibido consultar Supabase directamente desde componentes; usar src/services/supabaseClient.ts y funciones de dominio.",
+"Validar rol (compras/ventas/admin) en server actions y API routes.",
+"No exponer claves ni URLs internas en el cliente; usar variables de entorno.",
+"Commits con convención: feat|fix|chore|docs(scope): mensaje claro.",
+"Antes de push: pnpm lint && pnpm typecheck && pnpm build deben pasar.",
+"Documentar flujos n8n y endpoints en README (bitácora breve por cambio).",
+"No publicar a main si falla build o hay cambios sin migración/SQL correspondiente.",
+"Evitar dependencias no auditadas; preferir oficiales y versiones estables."
+],
+"workflows": {
+"phase1_setup": [
+"Crear proyecto en Supabase y ejecutar supabase_init.sql",
+"Configurar variables en .env.local y en Vercel",
+"Instalar extensiones recomendadas en Cursor"
+],
+"phase2_compras": [
+"UI de carga (.pdf/.xlsx) con verificación de rol=compras",
+"POST /api/upload -> n8n -> parse -> upsert en products/purchase_prices",
+"Tablita de resumen/errores post-proceso"
+],
+"phase3_cotizador": [
+"Form calcular precio con zona/volumen",
+"POST /api/quote -> usa margin_rules/commission_rules + IVA",
+"Guardar en quotes/quote_items y permitir vista previa"
+],
+"phase4_envio_feedback": [
+"POST /api/send -> n8n WhatsApp/Email",
+"Registrar status=sent/closed/lost y feedback vinculado",
+"Dashboard con filtros por fecha/cliente/estatus"
+]
+},
+"quality_gates": [
+"Tiempo de cotización < 5 min de punta a punta",
+"≥ 6 listas de precios procesadas sin error",
+"≥ 15 cotizaciones completas registradas",
+"Cobertura RLS verificada (ventas sin acceso a costos)"
+],
+"guardrails": [
+"Bloquear rutas de compra a usuarios sin rol=compras",
+"Nunca retornar costos en respuestas al cliente/ventas",
+"Registrar errores de API en src/lib/logger.ts con nivel y requestId"
+],
+"cursor_tips": [
+"Cuando pidas cambios amplios, referencia este archivo para que la IA respete el stack y las reglas.",
+"Usa comentarios TODO:, FIXME: y NOTE: para que la IA priorice refactors."
+]
+}
