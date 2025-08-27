@@ -8,11 +8,7 @@ export default async function HomePage() {
   if (!user) {
     redirect('/login')
   }
-  
-  return (
-    <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-2xl font-bold">Bienvenido a CotizAI</h1>
-      <p>Has iniciado sesión correctamente.</p>
-    </div>
-  )
+
+  // Si hay usuario, redirigir al dashboard según su rol
+  redirect('/app/ventas')
 }
